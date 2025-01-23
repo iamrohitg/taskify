@@ -42,6 +42,16 @@ app.use(
   })
 );
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log("Incoming Request:");
+  console.log("Method:", req.method);
+  console.log("Path:", req.path);
+  console.log("Full URL:", req.originalUrl);
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body);
+  next();
+});
+
 app.get(
   `/`,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

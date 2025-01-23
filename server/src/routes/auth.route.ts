@@ -12,7 +12,13 @@ const failedUrl = `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`;
 
 const authRoutes = Router();
 
-authRoutes.post("/register", registerUserController);
+authRoutes.post("/register", (req, res, next) => {
+  console.log('Register Route Hit');
+  console.log('Request Body:', req.body);
+  console.log('Request Headers:', req.headers);
+  
+  registerUserController(req, res, next);
+});
 authRoutes.post("/login", loginController);
 
 authRoutes.post("/logout", logOutController);
