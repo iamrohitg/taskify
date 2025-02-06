@@ -1,14 +1,18 @@
 import API from "./axios-client";
 import {
   AllMembersInWorkspaceResponseType,
+  AllProjectPayloadType,
+  AllProjectResponseType,
   AllWorkspaceResponseType,
   AnalyticsResponseType,
+  ChangeWorkspaceMemberRoleType,
   CreateWorkspaceResponseType,
   CreateWorkspaceType,
   CurrentUserResponseType,
   EditWorkspaceType,
   LoginResponseType,
   loginType,
+  ProjectByIdPayloadType,
   registerType,
   WorkspaceByIdResponseType,
 } from "@/types/api.type";
@@ -76,7 +80,16 @@ export const getWorkspaceAnalyticsQueryFn = async (
   return response.data;
 };
 
-export const changeWorkspaceMemberRoleMutationFn = async () => {};
+export const changeWorkspaceMemberRoleMutationFn = async ({
+  workspaceId,
+  data,
+}: ChangeWorkspaceMemberRoleType) => {
+  const response = await API.put(
+    `/workspace/change/member/role/${workspaceId}`,
+    data
+  );
+  return response.data;
+};
 
 export const deleteWorkspaceMutationFn = async (
   workspaceId: string
@@ -106,13 +119,32 @@ export const createProjectMutationFn = async () => {};
 
 export const editProjectMutationFn = async () => {};
 
-export const getProjectsInWorkspaceQueryFn = async () => {};
+export const getProjectsInWorkspaceQueryFn = async ({
+  workspaceId,
+  pageSize = 10,
+  pageNumber = 1,
+}: AllProjectPayloadType): Promise<AllProjectResponseType> => {
+  const response = await API.get(
+    `/project/workspace/${workspaceId}/all?pageSize=${pageSize}&pageNumber=${pageNumber}`
+  );
+  return response.data;
+};
 
 export const getProjectByIdQueryFn = async () => {};
 
 export const getProjectAnalyticsQueryFn = async () => {};
 
-export const deleteProjectMutationFn = async () => {};
+export const deleteProjectMutationFn = async ({
+  workspaceId,
+  projectId,
+}: ProjectByIdPayloadType): Promise<{
+  message: string;
+}> => {
+  const response = await API.delete(
+    `/project/${projectId}/workspace/${workspaceId}/delete`
+  );
+  return response.data;
+};
 
 //*******TASKS ********************************
 //************************* */
