@@ -1,4 +1,4 @@
-//THE UPDATED ONE BECAUSE OF THE FILTERS ->  Take Note ->
+//THE UPDATED ONE BECAUSE OF THE FILTERS
 export const transformOptions = (
   options: string[],
   iconMap?: Record<string, React.ComponentType<{ className?: string }>>
