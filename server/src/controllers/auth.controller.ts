@@ -5,19 +5,25 @@ import { registerSchema } from "../validation/auth.validation";
 import { HTTPSTATUS } from "../config/http.config";
 import { registerUserService } from "../services/auth.service";
 import passport from "passport";
+import { signJwtToken } from "../utils/jwt";
 
 export const googleLoginCallback = asyncHandler(
   async (req: Request, res: Response) => {
+    const jwt = req.jwt;
     const currentWorkspace = req.user?.currentWorkspace;
 
-    if (!currentWorkspace) {
+    if (!jwt) {
       return res.redirect(
         `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`
       );
     }
 
+    // return res.redirect(
+    //   `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
+    // );
+
     return res.redirect(
-      `${config.FRONTEND_ORIGIN}/workspace/${currentWorkspace}`
+      `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=success&sucess_token=${jwt}&current_workspace=${currentWorkspace}`
     );
   }
 );
@@ -55,15 +61,23 @@ export const loginController = asyncHandler(
           });
         }
 
-        req.logIn(user, (err) => {
-          if (err) {
-            return next(err);
-          }
+        // req.logIn(user, (err) => {
+        //   if (err) {
+        //     return next(err);
+        //   }
 
-          return res.status(HTTPSTATUS.OK).json({
-            message: "Logged in successfully",
-            user,
-          });
+        //   return res.status(HTTPSTATUS.OK).json({
+        //     message: "Logged in successfully",
+        //     user,
+        //   });
+        // });
+
+        const access_token = signJwtToken({ userId: user._id });
+
+        return res.status(HTTPSTATUS.OK).json({
+          message: "Logged in successfully",
+          access_token,
+          user,
         });
       }
     )(req, res, next);
