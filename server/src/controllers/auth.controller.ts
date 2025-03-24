@@ -23,7 +23,7 @@ export const googleLoginCallback = asyncHandler(
     // );
 
     return res.redirect(
-      `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=success&sucess_token=${jwt}&current_workspace=${currentWorkspace}`
+      `${config.FRONTEND_GOOGLE_CALLBACK_URL}?status=success&access_token=${jwt}&current_workspace=${currentWorkspace}`
     );
   }
 );
